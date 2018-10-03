@@ -2,7 +2,6 @@
 
 (in-package #:ellipse-test)
 
-
 (defun square (x)
   (* x x))
 
@@ -138,13 +137,15 @@
            do
            (draw-ellipse-segment a b)))))
 
+(defun draw-ellipses (stream)
+  (my-draw-ellipse stream 150 200 70 70 -10 10 :ink +blue+)
+  (my-draw-ellipse stream 300 200 20 -80 1 -40 :ink +dark-green+)
+  (draw-line* stream 260 200 340 200 :ink +red+ :line-thickness 4)
+  (my-draw-ellipse stream 500 200 -50 50 0 10 :ink +dark-green+))
+
 (defun display-ellipse (frame pane)
   (declare (ignore frame))
-  (my-draw-ellipse pane 150 200 70 70 -10 10 :ink +blue+)
-  (my-draw-ellipse pane 300 200 20 -80 1 -40 :ink +dark-green+)
-  (draw-line* pane 260 200 340 200 :ink +red+ :line-thickness 4)
-  (my-draw-ellipse pane 500 200 -50 50 0 10 :ink +dark-green+))
-
+  (draw-ellipses pane))
 
 (defun ellipse-test-pdf (&key (file "/tmp/ellipse-test.pdf") (device-type :a4))
   (with-open-file (file-stream file :direction :output
@@ -155,7 +156,7 @@
                 :header-comments '(:title (name task))
                 :scale-to-fit t
                 :device-type device-type)
-      (draw-ellipse stream))))
+      (draw-ellipses stream))))
 
 (define-application-frame ellipse-test-app ()
   ()
