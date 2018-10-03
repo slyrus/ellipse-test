@@ -10,22 +10,6 @@
   (sqrt (+ (square x1)
            (square y1))))
 
-(defun ellipse-point (center-x center-y
-                      radius1-dx radius1-dy radius2-dx radius2-dy
-                      theta)
-  (values (+ center-x
-             (* radius1-dx (sin theta))
-             (* radius2-dx (sin theta)))
-          (+ center-y
-             (* radius1-dy (cos theta))
-             (* radius2-dy (cos theta)))))
-
-;; angle = atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
-
-;; and you may want to normalize it to the range 0 .. 2 * Pi:
-
-;; if (angle < 0) angle += 2 * M_PI;
-
 (defun rad-to-deg (theta)
   (* 180 (/ theta pi)))
 
