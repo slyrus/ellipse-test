@@ -48,34 +48,41 @@
                (find-angle radius1-dx radius1-dy))))
       (values a b theta))))
 
-(defun ell (eta center-x center-y a b theta)
-  (values (+ center-x
-             (* a (cos theta) (cos eta))
-             (- (* b (sin theta) (sin eta))))
-          (+ center-y
-             (* a (sin theta) (cos eta))
-             (* b (cos theta) (sin eta)))))
+(defun ell (lam center-x center-y a b theta)
+  (let ((eta (atan (/ (sin lam) b)
+                   (/ (cos lam) a))))
+    (values (+ center-x
+               (* a (cos theta) (cos eta))
+               (- (* b (sin theta) (sin eta))))
+            (+ center-y
+               (* a (sin theta) (cos eta))
+               (* b (cos theta) (sin eta))))))
 
-(defun ell* (eta
+(defun ell* (lam
              center-x center-y
              radius1-dx radius1-dy radius2-dx radius2-dy)
   (multiple-value-bind (a b theta)
-      (reparameterize-ellipse radius1-dx radius1-dy radius2-dx radius2-dy)
-    (ell eta center-x center-y a b theta)))
+      (reparameterize-ellipse radius1-dx
+                              radius1-dy
+                              radius2-dx
+                              radius2-dy)
+    (ell lam center-x center-y a b theta)))
 
-(defun ell-prime (eta a b theta)
-  (values (+ (- (* a (cos theta) (sin eta)))
-             (- (* b (sin theta) (cos eta))))
-          (+ (- (* a (sin theta) (sin eta)))
-             (* b (cos theta) (cos eta)))))
+(defun ell-prime (lam a b theta)
+  (let ((eta (atan (/ (sin lam) b)
+                   (/ (cos lam) a))))
+    (values (+ (- (* a (cos theta) (sin eta)))
+               (- (* b (sin theta) (cos eta))))
+            (+ (- (* a (sin theta) (sin eta)))
+               (* b (cos theta) (cos eta))))))
 
-(defun ell-prime* (eta
+(defun ell-prime* (lam
                    center-x center-y
                    radius1-dx radius1-dy radius2-dx radius2-dy)
   (declare (ignore center-x center-y))
   (multiple-value-bind (a b theta)
       (reparameterize-ellipse radius1-dx radius1-dy radius2-dx radius2-dy)
-    (ell-prime eta a b theta)))
+    (ell-prime lam a b theta)))
 
 (let ((center-x 200)
       (center-y 200)
@@ -83,11 +90,11 @@
       (radius1-dy 200)
       (radius2-dx 100)
       (radius2-dy 100)
-      (eta 0))
+      (lam 0))
   (values
-   (ell* eta center-x center-y
+   (ell* lam center-x center-y
       radius1-dx radius1-dy radius2-dx radius2-dy)
-   (ell-prime* eta center-x center-y
+   (ell-prime* lam center-x center-y
            radius1-dx radius1-dy radius2-dx radius2-dy)))
 
 (defun my-draw-ellipse (stream center-x center-y
@@ -100,24 +107,24 @@
                    center-x center-y
                    radius1-dx radius1-dy radius2-dx radius2-dy
                    :ink +gray90+ :line-thickness 4 :filled nil)
-    (flet ((draw-ellipse-segment (theta1 theta2)
+    (flet ((draw-ellipse-segment (lam1 lam2)
              (multiple-value-bind (p1x p1y)
-                 (ell* theta1
-                      center-x center-y
-                      radius1-dx radius1-dy radius2-dx radius2-dy)
+                 (ell* lam1
+                       center-x center-y
+                       radius1-dx radius1-dy radius2-dx radius2-dy)
                (multiple-value-bind (p2x p2y)
-                   (ell* theta2 center-x center-y
-                        radius1-dx radius1-dy radius2-dx radius2-dy)
+                   (ell* lam2 center-x center-y
+                         radius1-dx radius1-dy radius2-dx radius2-dy)
                  (multiple-value-bind (e1x e1y)
-                     (ell-prime* theta1
-                                center-x center-y
+                     (ell-prime* lam1
+                                 center-x center-y
                                 radius1-dx radius1-dy radius2-dx radius2-dy)
                    (multiple-value-bind (e2x e2y)
-                       (ell-prime* theta2
-                                  center-x center-y
+                       (ell-prime* lam2
+                                   center-x center-y
                                   radius1-dx radius1-dy radius2-dx radius2-dy)
-                     (let ((alpha (* (sin (- theta2 theta1))
-                                     (/ (- (sqrt (+ 4 (* 3 (square (tan (/ (- theta2 theta1) 2)))))) 1)
+                     (let ((alpha (* (sin (- lam2 lam1))
+                                     (/ (- (sqrt (+ 4 (* 3 (square (tan (/ (- lam2 lam1) 2)))))) 1)
                                         3))))
                        (draw-polygon* stream
                                       (list p1x p1y
@@ -135,7 +142,7 @@
 (defun display-ellipse (frame pane)
   (declare (ignore frame))
   (my-draw-ellipse pane 100 200 -60 60 30 60 :ink +blue+)
-  (my-draw-ellipse pane 300 200 40 -80 40 -30 :ink +dark-green+))
+  (my-draw-ellipse pane 300 200 20 -80 1 -30 :ink +dark-green+))
 
 (defun ellipse-test-pdf (&key (file "/tmp/ellipse-test.pdf") (device-type :a4))
   (with-open-file (file-stream file :direction :output
