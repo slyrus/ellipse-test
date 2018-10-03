@@ -175,6 +175,6 @@
              (lambda ()
                (run-frame-top-level frame))))))
 
-(ellipse-test-pdf)
+#+nil (ellipse-test-pdf)
 
 
