@@ -106,7 +106,7 @@
     (draw-ellipse* stream
                    center-x center-y
                    radius1-dx radius1-dy radius2-dx radius2-dy
-                   :ink +gray90+ :line-thickness 4 :filled nil)
+                   :ink +red+ :line-thickness 4 :filled nil)
     (flet ((draw-ellipse-segment (lam1 lam2)
              (multiple-value-bind (p1x p1y)
                  (ell* lam1
@@ -128,21 +128,23 @@
                                         3))))
                        (draw-polygon* stream
                                       (list p1x p1y
-                                            #+nil
-                                            (progn (+ p1x (* alpha e1x)) (+ p1y (* alpha e1y))
-                                                   (- p2x (* alpha e2x)) (- p2y (* alpha e2y)))
+                                            (+ p1x (* alpha e1x)) (+ p1y (* alpha e1y))
+                                            (- p2x (* alpha e2x)) (- p2y (* alpha e2y))
                                             p2x p2y)
                                       :filled nil
                                       :ink ink :line-thickness 2))))))))
-      (loop for a from 0 to (* 2 pi) by (/ pi 4)
-         for b = (+ a (/ pi 4))
+      (loop for a from 0 to (* 2 pi) by (/ pi 2)
+         for b = (+ a (/ pi 2))
            do
            (draw-ellipse-segment a b)))))
 
 (defun display-ellipse (frame pane)
   (declare (ignore frame))
-  (my-draw-ellipse pane 100 200 -60 60 30 60 :ink +blue+)
-  (my-draw-ellipse pane 300 200 20 -80 1 -30 :ink +dark-green+))
+  (my-draw-ellipse pane 150 200 70 70 -10 10 :ink +blue+)
+  (my-draw-ellipse pane 300 200 20 -80 1 -40 :ink +dark-green+)
+  (draw-line* pane 260 200 340 200 :ink +red+ :line-thickness 4)
+  (my-draw-ellipse pane 500 200 -50 50 0 10 :ink +dark-green+))
+
 
 (defun ellipse-test-pdf (&key (file "/tmp/ellipse-test.pdf") (device-type :a4))
   (with-open-file (file-stream file :direction :output
@@ -173,8 +175,5 @@
                (run-frame-top-level frame))))))
 
 (ellipse-test-pdf)
-
-
-
 
 
