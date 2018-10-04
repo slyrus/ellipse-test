@@ -12,24 +12,6 @@
 (defun rad-to-deg (theta)
   (* 180 (/ theta pi)))
 
-(defun dot-prod (x1 y1 x2 y2)
-  (+ (* x1 y1) (* x2 y2)))
-
-(defun normalize-angle (theta)
-  (if (minusp theta)
-      (+ theta (* pi 2))
-      theta))
-
-(defun find-angle* (x1 y1 x2 y2)
-  (let ((theta (- (phase (complex y2 x2))
-                  (phase (complex y1 x1)))))
-    (normalize-angle theta)))
-
-(defun find-angle-2 (x1 y1 x2 y2)
-  (let ((dp (dot-prod x1 y1 x2 y2))
-        (magxy (* (vec-len x1 y1) (vec-len x2 y2))))
-    (acos (normalize-angle (/ dp magxy)))))
-
 (defun find-angle (x1 y1)
   (let ((angle (acos (/ x1 (vec-len x1 y1)))))
     (if (minusp y1)
@@ -175,6 +157,31 @@
              (lambda ()
                (run-frame-top-level frame))))))
 
-#+nil (ellipse-test-pdf)
+(ellipse-test-pdf)
 
+
+
+
+;;; not used
+;;;
+(defun dot-prod (x1 y1 x2 y2)
+  (+ (* x1 y1) (* x2 y2)))
+
+(defun normalize-angle (theta)
+  (if (minusp theta)
+      (+ theta (* pi 2))
+      theta))
+
+(defun find-angle* (x1 y1 x2 y2)
+  (let ((theta (- (phase (complex y2 x2))
+                  (phase (complex y1 x1)))))
+    (normalize-angle theta)))
+
+(defun find-angle-2 (x1 y1 x2 y2)
+  (let ((dp (dot-prod x1 y1 x2 y2))
+        (magxy (* (vec-len x1 y1) (vec-len x2 y2))))
+    (acos (normalize-angle (/ dp magxy)))))
+
+;;;
+;;;
 
