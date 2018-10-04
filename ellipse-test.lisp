@@ -182,6 +182,17 @@
         (magxy (* (vec-len x1 y1) (vec-len x2 y2))))
     (acos (normalize-angle (/ dp magxy)))))
 
+(defun transformation-angle (tr)
+  (let ((x1 0) (y1 1)
+        (x2 1) (y2 0))
+    (multiple-value-bind (tx1 ty1)
+        (transform-position tr x1 y1)
+      (multiple-value-bind (tx2 ty2)
+          (transform-position tr x2 y2)
+        (- (find-angle* tx1 ty1 tx2 ty2) (/ pi 2))))))
+
+(let ((tr (clim:make-transformation 1 0 0 -1 0 0)))
+  (transformation-angle tr))
 ;;;
 ;;;
 
