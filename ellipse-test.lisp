@@ -120,10 +120,13 @@
            (draw-ellipse-segment a b)))))
 
 (defun draw-ellipses (stream)
-  (my-draw-ellipse stream 150 200 70 70 -10 10 :ink +blue+)
-  (my-draw-ellipse stream 300 200 20 -80 1 -40 :ink +dark-green+)
-  (draw-line* stream 260 200 340 200 :ink +red+ :line-thickness 4)
-  (my-draw-ellipse stream 500 200 -50 50 0 10 :ink +dark-green+))
+  (draw-ellipse* stream 100 200 70 70 -10 10 :ink +blue+ :filled t
+                 :start-angle 0 :end-angle pi :filled t)
+  (draw-ellipse* stream 200 100 50 0 0 50 :ink +red+ :filled nil
+                 :start-angle (/ pi 2) :end-angle (* 3 (/ pi 2)))
+  (draw-line* stream 210 200 290 200 :ink +red+ :line-thickness 4)
+  (draw-ellipse* stream 250 200 20 -80 1 -40 :ink +dark-green+ :filled t)
+  (draw-ellipse* stream 400 200 -50 50 0 10 :ink +orange+))
 
 (defun display-ellipse (frame pane)
   (declare (ignore frame))
