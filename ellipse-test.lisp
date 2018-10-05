@@ -126,6 +126,9 @@
 (defun draw-ellipses (stream)
   (my-draw-ellipse stream 100 300 70 70 -10 10 :ink +blue+)
 
+  (draw-ellipse* stream 230 80 30 0 0 10 :filled t
+                 :start-angle 0 :end-angle (/ (* 6 pi) 4))
+
   (draw-ellipse* stream 100 200 70 70 -10 10 :ink +blue+ :filled t
                  :start-angle 0 :end-angle 3 :filled t)
 
