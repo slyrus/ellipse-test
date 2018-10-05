@@ -83,7 +83,7 @@
   #+nil
   (draw-circle* stream center-x center-y radius1-dx :ink +blue+ :line-thickness 1)
   (progn
-
+    #+nil
     (draw-ellipse* stream
                    center-x center-y
                    radius1-dx radius1-dy radius2-dx radius2-dy
@@ -113,20 +113,41 @@
                                             (- p2x (* alpha e2x)) (- p2y (* alpha e2y))
                                             p2x p2y)
                                       :filled nil
+                                      :closed nil
                                       :ink ink :line-thickness 2))))))))
       (loop for a from 0 to (* 2 pi) by (/ pi 2)
          for b = (+ a (/ pi 2))
            do
            (draw-ellipse-segment a b)))))
 
+
+
+
 (defun draw-ellipses (stream)
+  (my-draw-ellipse stream 100 300 70 70 -10 10 :ink +blue+)
+
   (draw-ellipse* stream 100 200 70 70 -10 10 :ink +blue+ :filled t
-                 :start-angle 0 :end-angle pi :filled t)
+                 :start-angle 0 :end-angle 3 :filled t)
+
+  (draw-ellipse* stream 100 230 70 70 -10 10 :ink +blue+ :filled nil
+                 :start-angle 0.3 :end-angle pi :filled t)
+
+  (draw-ellipse* stream 200 80 50 0 0 50 :ink +red+ :filled nil
+                 :start-angle 0 :end-angle (* 0.3 (/ pi 2)))
+
   (draw-ellipse* stream 200 100 50 0 0 50 :ink +red+ :filled nil
-                 :start-angle (/ pi 2) :end-angle (* 3 (/ pi 2)))
-  (draw-line* stream 210 200 290 200 :ink +red+ :line-thickness 4)
-  (draw-ellipse* stream 250 200 20 -80 1 -40 :ink +dark-green+ :filled t)
-  (draw-ellipse* stream 400 200 -50 50 0 10 :ink +orange+))
+                 :start-angle (/ pi 2) :end-angle (* 6 (/ pi 8)))
+
+  (draw-ellipse* stream 100 100 25 0 0 25 :ink +red+ :filled nil
+                 :start-angle 0 :end-angle pi)
+  (draw-ellipse* stream 250 200 10 -40 1 -20 :ink +dark-green+ :filled t)
+  (draw-line* stream 230 200 270 200 :ink +red+ :line-thickness 4)
+  (draw-ellipse* stream 400 200 -50 50 0 10 :ink +orange+)
+  (draw-ellipse* stream 300 300 30 0 0 10 :filled nil
+                 :start-angle 0 :end-angle (/ (* 6 pi) 4))
+  (draw-ellipse* stream 100 100 50 -30 20 8 :filled nil
+                 :start-angle 0 :end-angle (* 6 (/ pi 4)))
+  (draw-ellipse* stream 350 200 10 -40 1 -20 :ink +dark-green+ :filled t))
 
 (defun display-ellipse (frame pane)
   (declare (ignore frame))
