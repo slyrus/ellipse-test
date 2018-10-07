@@ -8,4 +8,5 @@
   :serial t
   :depends-on (#:mcclim)
   :components ((:file "package")
+               (:file "ellipse-drawing")
                (:file "ellipse-test")))
